@@ -22,10 +22,11 @@ gls.left[2] = {
                           cv = colors.red,ce=colors.red, r = colors.cyan,
                           rm = colors.cyan, ['r?'] = colors.cyan,
                           ['!']  = colors.red,t = colors.red}
-      local mode_name = {n = 'NOMAL', i='INSERT', v='VISUAL'}
+      local mode_name_dic = {n = 'NOMAL', i='INSERT', v='VISUAL'}
       vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color[vim.fn.mode()])
-      return ' ' .. mode_name[vim.fn.mode()]
-      -- return '  '
+      -- local mode = vim.fn.mode()
+      -- return ' ' .. mode_name_dic[mode]
+      return '  '
     end,
     highlight = {colors.red,colors.bg,'bold'},
   },

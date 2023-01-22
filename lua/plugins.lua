@@ -85,13 +85,13 @@ return packer.startup(function(use)
   use ({"onsails/lspkind.nvim"}) --補完欄にアイコンを表示
 
   -- UI
-  use({
-    "glepnir/lspsaga.nvim",
-    branch = "main",
-    config = function()
-            require('lspsaga').setup({})
-        end,
-  })
+  -- use({
+ --   "glepnir/lspsaga.nvim",
+ --   branch = "main",
+ --   config = function()
+ --           require('lspsaga').setup({})
+ --       end,
+ -- })
 
   -- for fomatter and linnter tool
   use({ "jose-elias-alvarez/null-ls.nvim" })
