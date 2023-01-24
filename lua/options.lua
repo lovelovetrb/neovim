@@ -21,7 +21,7 @@ local options = {
 	undofile = true,
 	updatetime = 300,
 	writebackup = false,
-	shell = "fish",
+	shell = "zsh",
 	backupskip = { "/tmp/*", "/private/tmp/*" },
 	expandtab = true,
 	shiftwidth = 2,
@@ -38,7 +38,7 @@ local options = {
 	background = "dark",
 	scrolloff = 8,
 	sidescrolloff = 8,
-	guifont = "monospace:h17",
+	guifont = "monospace:h7",
 	splitbelow = false, -- オンのとき、ウィンドウを横分割すると新しいウィンドウはカレントウィンドウの下に開かれる
 	splitright = false, -- オンのとき、ウィンドウを縦分割すると新しいウィンドウはカレントウィンドウの右に開かれる
 }

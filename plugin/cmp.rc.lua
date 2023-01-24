@@ -20,6 +20,7 @@ cmp.setup({
     ['<C-l>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ["<C-y>"] = cmp.mapping.confirm({ select = true }),--Ctrl+yで補完を選択確定
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),--Ctrl+yで補完を選択確定
   }),
   experimental = {
     ghost_text = false,
