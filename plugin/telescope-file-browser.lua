@@ -27,4 +27,10 @@ vim.api.nvim_set_keymap(
   ":Telescope file_browser",
   { noremap = true }
 )
+vim.api.nvim_set_keymap(
+  "n",
+  "<space>fh",
+  ":Telescope file_browser hidden=True",
+  { noremap = true }
+)
 
