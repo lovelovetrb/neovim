@@ -6,12 +6,15 @@ require("telescope").setup {
       theme = "ivy",
       -- disables netrw and use telescope-file-browser in its place
       hijack_netrw = true,
+      initial_mode = 'normal',
       mappings = {
         ["i"] = {
           -- your custom insert mode mappings
+          ['<C-u>'] = require "telescope.actions".close,
         },
         ["n"] = {
           -- your custom normal mode mappings
+          ['<C-u>'] = require "telescope.actions".close,
         },
       },
     },
@@ -34,3 +37,9 @@ vim.api.nvim_set_keymap(
   { noremap = true }
 )
 
+require 'nvim-treesitter.configs'.setup {
+  auto_install = true,
+  ensure_installed = "all",
+  highlight = { enable = true },
+  indent = { enable = true },
+}

@@ -1,213 +1,236 @@
-local gl = require('galaxyline')
-local colors = require('galaxyline.theme').default
-local condition = require('galaxyline.condition')
-local gls = gl.section
-gl.short_line_list = {'NvimTree','vista','dbui','packer'}
+require('gitsigns').setup()
+local line_ok, feline = pcall(require, "feline")
+if not line_ok then
+	return
+end
 
-gls.left[1] = {
-  RainbowRed = {
-    provider = function() return '▊ ' end,
-    highlight = {colors.blue,colors.bg}
-  },
-}
-gls.left[2] = {
-  ViMode = {
-    provider = function()
-      -- auto change color according the vim mode
-      local mode_color = {n = colors.red, i = colors.green,v=colors.blue,
-                          [''] = colors.blue,V=colors.blue,
-                          c = colors.magenta,no = colors.red,s = colors.orange,
-                          S=colors.orange,[''] = colors.orange,
-                          ic = colors.yellow,R = colors.violet,Rv = colors.violet,
-                          cv = colors.red,ce=colors.red, r = colors.cyan,
-                          rm = colors.cyan, ['r?'] = colors.cyan,
-                          ['!']  = colors.red,t = colors.red}
-      local mode_name_dic = {n = 'NOMAL', i='INSERT', v='VISUAL'}
-      vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color[vim.fn.mode()])
-      -- local mode = vim.fn.mode()
-      -- return ' ' .. mode_name_dic[mode]
-      return '  '
-    end,
-    highlight = {colors.red,colors.bg,'bold'},
-  },
-}
-gls.left[3] = {
-  FileSize = {
-    provider = 'FileSize',
-    condition = condition.buffer_not_empty,
-    highlight = {colors.fg,colors.bg}
-  }
-}
-gls.left[4] ={
-  FileIcon = {
-    provider = 'FileIcon',
-    condition = condition.buffer_not_empty,
-    highlight = {require('galaxyline.provider_fileinfo').get_file_icon_color,colors.bg},
-  },
+local one_monokai = {
+	fg = "#abb2bf",
+	bg = "#1e2024",
+	--bg = "#000000",
+	green = "#98c379",
+	yellow = "#e5c07b",
+	purple = "#c678dd",
+	orange = "#d19a66",
+	peanut = "#f6d5a4",
+	red = "#e06c75",
+	aqua = "#61afef",
+	darkblue = "#1e2024",
+	-- darkblue = "#282c34",
+	dark_red = "#f75f5f",
 }
 
-gls.left[5] = {
-  FileName = {
-    provider = 'FileName',
-    condition = condition.buffer_not_empty,
-    highlight = {colors.magenta,colors.bg,'bold'}
-  }
+local vi_mode_colors = {
+	NORMAL = "green",
+	OP = "green",
+	INSERT = "yellow",
+	VISUAL = "purple",
+	LINES = "orange",
+	BLOCK = "dark_red",
+	REPLACE = "red",
+	COMMAND = "aqua",
 }
 
-gls.left[6] = {
-  LineInfo = {
-    provider = 'LineColumn',
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.fg,colors.bg},
-  },
+local c = {
+	vim_mode = {
+		provider = {
+			name = "vi_mode",
+			opts = {
+				show_mode_name = true,
+				-- padding = "center", -- Uncomment for extra padding.
+			},
+		},
+		hl = function()
+			return {
+				fg = require("feline.providers.vi_mode").get_mode_color(),
+				bg = "darkblue",
+				style = "bold",
+				name = "NeovimModeHLColor",
+			}
+		end,
+		left_sep = "block",
+		right_sep = "block",
+	},
+	gitBranch = {
+		provider = "git_branch",
+		hl = {
+			fg = "peanut",
+			bg = "darkblue",
+			style = "bold",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	gitDiffAdded = {
+		provider = "git_diff_added",
+		hl = {
+			fg = "green",
+			bg = "darkblue",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	gitDiffRemoved = {
+		provider = "git_diff_removed",
+		hl = {
+			fg = "red",
+			bg = "darkblue",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	gitDiffChanged = {
+		provider = "git_diff_changed",
+		hl = {
+			fg = "fg",
+			bg = "darkblue",
+		},
+		left_sep = "block",
+		right_sep = "right_filled",
+	},
+	separator = {
+		provider = "",
+	},
+	fileinfo = {
+		provider = {
+			name = "file_info",
+			opts = {
+				type = "relative-short",
+			},
+		},
+		hl = {
+			style = "bold",
+		},
+		left_sep = " ",
+		right_sep = " ",
+	},
+	diagnostic_errors = {
+		provider = "diagnostic_errors",
+		hl = {
+			fg = "red",
+		},
+	},
+	diagnostic_warnings = {
+		provider = "diagnostic_warnings",
+		hl = {
+			fg = "yellow",
+		},
+	},
+	diagnostic_hints = {
+		provider = "diagnostic_hints",
+		hl = {
+			fg = "aqua",
+		},
+	},
+	diagnostic_info = {
+		provider = "diagnostic_info",
+	},
+	lsp_client_names = {
+		provider = "lsp_client_names",
+		hl = {
+			fg = "purple",
+			bg = "darkblue",
+			style = "bold",
+		},
+		left_sep = "left_filled",
+		right_sep = "block",
+	},
+	file_type = {
+		provider = {
+			name = "file_type",
+			opts = {
+				filetype_icon = true,
+				case = "titlecase",
+			},
+		},
+		hl = {
+			fg = "red",
+			bg = "darkblue",
+			style = "bold",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	file_encoding = {
+		provider = "file_encoding",
+		hl = {
+			fg = "orange",
+			bg = "darkblue",
+			style = "italic",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	position = {
+		provider = "position",
+		hl = {
+			fg = "green",
+			bg = "darkblue",
+			style = "bold",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	line_percentage = {
+		provider = "line_percentage",
+		hl = {
+			fg = "aqua",
+			bg = "darkblue",
+			style = "bold",
+		},
+		left_sep = "block",
+		right_sep = "block",
+	},
+	scroll_bar = {
+		provider = "scroll_bar",
+		hl = {
+			fg = "yellow",
+			style = "bold",
+		},
+	},
 }
 
-gls.left[7] = {
-  PerCent = {
-    provider = 'LinePercent',
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.fg,colors.bg,'bold'},
-  }
+local left = {
+	c.vim_mode,
+	c.gitBranch,
+	c.gitDiffAdded,
+  c.gitDiffRemoved,
+	c.gitDiffChanged,
+	c.separator,
 }
 
-gls.left[8] = {
-  DiagnosticError = {
-    provider = 'DiagnosticError',
-    icon = '  ',
-    highlight = {colors.red,colors.bg}
-  }
-}
-gls.left[9] = {
-  DiagnosticWarn = {
-    provider = 'DiagnosticWarn',
-    icon = '  ',
-    highlight = {colors.yellow,colors.bg},
-  }
+local middle = {
+	c.fileinfo,
+	c.diagnostic_errors,
+	c.diagnostic_warnings,
+	c.diagnostic_info,
+	c.diagnostic_hints,
 }
 
-gls.left[10] = {
-  DiagnosticHint = {
-    provider = 'DiagnosticHint',
-    icon = '  ',
-    highlight = {colors.cyan,colors.bg},
-  }
+local right = {
+	c.lsp_client_names,
+	c.file_type,
+	c.file_encoding,
+	c.position,
+	c.line_percentage,
+	c.scroll_bar,
 }
 
-gls.left[11] = {
-  DiagnosticInfo = {
-    provider = 'DiagnosticInfo',
-    icon = '  ',
-    highlight = {colors.blue,colors.bg},
-  }
+local components = {
+	active = {
+		left,
+		middle,
+		right,
+	},
+	inactive = {
+		left,
+		middle,
+		right,
+	},
 }
 
-gls.mid[1] = {
-  ShowLspClient = {
-    provider = 'GetLspClient',
-    condition = function ()
-      local tbl = {['dashboard'] = true,['']=true}
-      if tbl[vim.bo.filetype] then
-        return false
-      end
-      return true
-    end,
-    icon = ' LSP:',
-    highlight = {colors.cyan,colors.bg,'bold'}
-  }
-}
-
-gls.right[1] = {
-  FileEncode = {
-    provider = 'FileEncode',
-    condition = condition.hide_in_width,
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.green,colors.bg,'bold'}
-  }
-}
-
-gls.right[2] = {
-  FileFormat = {
-    provider = 'FileFormat',
-    condition = condition.hide_in_width,
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.green,colors.bg,'bold'}
-  }
-}
-
-gls.right[3] = {
-  GitIcon = {
-    provider = function() return '  ' end,
-    condition = condition.check_git_workspace,
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.violet,colors.bg,'bold'},
-  }
-}
-
-gls.right[4] = {
-  GitBranch = {
-    provider = 'GitBranch',
-    condition = condition.check_git_workspace,
-    highlight = {colors.violet,colors.bg,'bold'},
-  }
-}
-
-gls.right[5] = {
-  DiffAdd = {
-    provider = 'DiffAdd',
-    condition = condition.hide_in_width,
-    icon = '  ',
-    highlight = {colors.green,colors.bg},
-  }
-}
-gls.right[6] = {
-  DiffModified = {
-    provider = 'DiffModified',
-    condition = condition.hide_in_width,
-    icon = ' 柳',
-    highlight = {colors.orange,colors.bg},
-  }
-}
-gls.right[7] = {
-  DiffRemove = {
-    provider = 'DiffRemove',
-    condition = condition.hide_in_width,
-    icon = '  ',
-    highlight = {colors.red,colors.bg},
-  }
-}
-
-gls.right[8] = {
-  RainbowBlue = {
-    provider = function() return ' ▊' end,
-    highlight = {colors.blue,colors.bg}
-  },
-}
-
-gls.short_line_left[1] = {
-  BufferType = {
-    provider = 'FileTypeName',
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.blue,colors.bg,'bold'}
-  }
-}
-
-gls.short_line_left[2] = {
-  SFileName = {
-    provider =  'SFileName',
-    condition = condition.buffer_not_empty,
-    highlight = {colors.fg,colors.bg,'bold'}
-  }
-}
-
-gls.short_line_right[1] = {
-  BufferIcon = {
-    provider= 'BufferIcon',
-    highlight = {colors.fg,colors.bg}
-  }
-}
+feline.setup({
+	components = components,
+	theme = one_monokai,
+	vi_mode_colors = vi_mode_colors,
+})
