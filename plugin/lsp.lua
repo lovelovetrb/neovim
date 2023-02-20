@@ -8,44 +8,45 @@ require("mason").setup({
     }
   }
 })
-require("mason-lspconfig").setup()
+require('mason-tool-installer').setup({
+  ensure_installed = { 'lua-language-server', 'luacheck',
+    'luaformatter', 'prettierd', 'typescript-language-server', 'eslint_d', 'css-lsp', 'typescript-language-server' },
+  auto_update = true,
+  run_on_start = true,
+  start_delay = 3000,
+  debounce_hours = 5,
+})
+
 
 -- null-ls
 local null_ls = require('null-ls')
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-null_ls.setup({
-  source = {
-    null_ls.builtins.diagnostics.eslint_d.with({
-      prefer_local = "node_modules/.bin",
-    }),
-    null_ls.builtins.formatting.prettierd.with {
-      prefer_local = "node_modules/.bin",
-    },
-  },
-  -- you can reuse a shared lspconfig on_attach callback here
-  on_attach = function(client, bufnr)
-    if client.supports_method("textDocument/formatting") then
-      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = augroup,
-        buffer = bufnr,
-        callback = function()
-          -- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
-          vim.lsp.buf.formatting_sync()
-        end,
-      })
-    end
-  end,
-})
 
-require("mason-null-ls").setup({
-  automatic_setup = true,
-  ensure_installed = { 'lua-language-server', "lua_ls", 'luaformatter', 'prettierd', 'typescript-language-server', 'eslint_d','css_lsp' },
+require('null-ls').setup({
+  sources = {
+    require('null-ls').builtins.diagnostics.eslint_d,
+    require('null-ls').builtins.formatting.prettierd
+  },
+  debug = true,
+  -- you can reuse a shared lspconfig on_attach callback here
+  --on_attach = function(client, bufnr)
+  --  if client.supports_method("textDocument/formatting") then
+  --    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+  --    vim.api.nvim_create_autocmd("BufWritePre", {
+  --      group = augroup,
+  --      buffer = bufnr,
+  --      callback = function()
+  -- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
+  --        vim.lsp.buf.formatting_sync()
+  --      end,
+  --    })
+  --  end
+  --end,
 })
 
 
 -- lspconfig
---tsserver setting
+-- tsserver setting
 require 'lspconfig'.tsserver.setup {
   on_attach = function(client)
     client.server_capabilities.document_formatting = false
@@ -66,13 +67,19 @@ require 'lspconfig'.lua_ls.setup {
   },
 }
 
-require'lspconfig'.pyright.setup{}
+require 'lspconfig'.pyright.setup {}
 
 
 -- C-hでhoverでLSPの情報が閲覧できる。
 vim.api.nvim_set_keymap('n', '<C-h>', '<Cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true })
 -- C-fでFormat
 vim.api.nvim_set_keymap('n', '<C-f>', '<Cmd>lua vim.lsp.buf.format()<CR>', { noremap = true })
+
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true })
+vim.keymap.set('n', 'gb', "<Cmd>b#<CR>", { noremap = true })
+
+
+--vim.keymap.set('n', 'rn', vim.diagnostics.setqflist, {noremap = true})
 
 
 -- nvim-cmp

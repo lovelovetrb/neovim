@@ -81,6 +81,7 @@ return packer.startup(function(use)
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
   })
+  use 'WhoIsSethDaniel/mason-tool-installer.nvim'
 
   -- complement
   use({ "hrsh7th/nvim-cmp" }) --補完エンジン本体
@@ -96,7 +97,6 @@ return packer.startup(function(use)
   -- for fomatter and linnter tool
   use({
     "jose-elias-alvarez/null-ls.nvim",
-    "jay-babu/mason-null-ls.nvim",
   })
 
   use {

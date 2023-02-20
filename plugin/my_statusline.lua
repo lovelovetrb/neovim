@@ -92,12 +92,12 @@ local c = {
 		provider = "",
 	},
 	fileinfo = {
-		provider = {
-			name = "file_info",
-			opts = {
-				type = "relative-short",
-			},
-		},
+    provider = {
+        name = 'file_info',
+        opts = {
+            type = 'full-path'
+        }
+    },
 		hl = {
 			style = "bold",
 		},
