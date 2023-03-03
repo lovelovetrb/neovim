@@ -185,6 +185,11 @@ _G.packer_plugins = {
     path = "/home/mizuki/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
+  ["prettier.nvim"] = {
+    loaded = true,
+    path = "/home/mizuki/.local/share/nvim/site/pack/packer/start/prettier.nvim",
+    url = "https://github.com/MunifTanjim/prettier.nvim"
+  },
   ["telescope-file-browser.nvim"] = {
     loaded = true,
     path = "/home/mizuki/.local/share/nvim/site/pack/packer/start/telescope-file-browser.nvim",
@@ -194,6 +199,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/mizuki/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
+  },
+  ["vim-commentary"] = {
+    loaded = true,
+    path = "/home/mizuki/.local/share/nvim/site/pack/packer/start/vim-commentary",
+    url = "https://github.com/tpope/vim-commentary"
   }
 }
 

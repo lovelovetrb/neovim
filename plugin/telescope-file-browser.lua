@@ -39,7 +39,13 @@ vim.api.nvim_set_keymap(
 
 require 'nvim-treesitter.configs'.setup {
   auto_install = true,
-  ensure_installed = "all",
+  ensure_installed = {"html", "java", "javascript", "json", "lua", "python", "sql", "typescript", "vim", "css", "dockerfile", "git_rebase", "gitattributes", "gitcommit"},
   highlight = { enable = true },
   indent = { enable = true },
 }
+
+
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})

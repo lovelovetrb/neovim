@@ -98,7 +98,9 @@ return packer.startup(function(use)
   use({
     "jose-elias-alvarez/null-ls.nvim",
   })
+  use('MunifTanjim/prettier.nvim')
 
+  -- SSH
   use {
     'chipsenkbeil/distant.nvim',
     config = function()
@@ -112,6 +114,9 @@ return packer.startup(function(use)
       }
     end
   }
+
+  use 'tpope/vim-commentary'
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

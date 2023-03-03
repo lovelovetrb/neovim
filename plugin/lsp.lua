@@ -24,12 +24,12 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 require('null-ls').setup({
   sources = {
-    require('null-ls').builtins.diagnostics.eslint_d,
-    require('null-ls').builtins.formatting.prettierd
+    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.formatting.prettierd
   },
   debug = true,
   -- you can reuse a shared lspconfig on_attach callback here
-  --on_attach = function(client, bufnr)
+  -- on_attach = function(client, bufnr)
   --  if client.supports_method("textDocument/formatting") then
   --    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
   --    vim.api.nvim_create_autocmd("BufWritePre", {
@@ -44,13 +44,32 @@ require('null-ls').setup({
   --end,
 })
 
+local prettier = require("prettier")
+
+prettier.setup({
+  bin = 'prettier', -- or `'prettierd'` (v0.22+)
+  filetypes = {
+    "css",
+    "graphql",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "less",
+    "markdown",
+    "scss",
+    "typescript",
+    "typescriptreact",
+    "yaml",
+  },
+})
 
 -- lspconfig
 -- tsserver setting
 require 'lspconfig'.tsserver.setup {
   on_attach = function(client)
-    client.server_capabilities.document_formatting = false
-    client.server_capabilities.document_range_formatting = false
+    client.server_capabilities.documentFormattingProviser = false
+    -- client.server_capabilities.document_range_formatting = false
   end,
   capabilities = require('cmp_nvim_lsp').default_capabilities()
 }
@@ -66,21 +85,23 @@ require 'lspconfig'.lua_ls.setup {
     },
   },
 }
-
 require 'lspconfig'.pyright.setup {}
 
 
 -- C-hでhoverでLSPの情報が閲覧できる。
 vim.api.nvim_set_keymap('n', '<C-h>', '<Cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true })
 -- C-fでFormat
-vim.api.nvim_set_keymap('n', '<C-f>', '<Cmd>lua vim.lsp.buf.format()<CR>', { noremap = true })
+-- vim.api.nvim_set_keymap('n', '<C-f>', '<Cmd>lua vim.lsp.buf.format()<CR>', { noremap = true })
+--vim.api.nvim_set_keymap('n', '<C-f>', function() vim.lsp.buf.format { async = true } end)
+vim.keymap.set('n', '<C-f>', function() vim.lsp.buf.format { async = true } end)
 
+
+-- gdで参照先に移動
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true })
+-- gbで参照前に戻る
 vim.keymap.set('n', 'gb', "<Cmd>b#<CR>", { noremap = true })
 
-
---vim.keymap.set('n', 'rn', vim.diagnostics.setqflist, {noremap = true})
-
+vim.keymap.set('n', 'qp', '<Cmd>lua vim.diagnostics.setqflist()<CR>', { noremap = true })
 
 -- nvim-cmp
 local cmp = require('cmp')
@@ -115,6 +136,7 @@ cmp.setup({
   },
 })
 
+-- lspkindでLSP関連の表示に対してアイコンを表示することができる
 local lspkind = require('lspkind')
 cmp.setup {
   formatting = {
@@ -122,7 +144,6 @@ cmp.setup {
       mode = 'symbol', -- show only symbol annotations
       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
       ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-
     })
   }
 }
